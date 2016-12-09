@@ -1,0 +1,46 @@
+/**
+* Header Styles
+*
+* @package ***Theme Name***
+* @author Jacob Martella
+* @version 1.0
+*/
+//* Define the variables to be used in this stylesheet
+@import "mixins";
+@import "settings";
+$black: #000000;
+/**
+***************** A. Top Menu ************************ 
+*/
+.header {
+	.top-bar {
+		.menu-icon {
+			border: 0px;
+			background-color: transparent;
+			&:hover {
+				background-color: transparent;
+			}
+		}
+		.current-item {
+			a {
+				color: #00ffff;
+			}
+		}
+	}
+}
+/**
+***************** B. Header ************************ 
+*/
+.site-title a:link, .site-title a:visited {
+	font-family: Georgia;
+	font-size: 28px;
+	color: $black;
+}
+.site-description a:link, .site-description a:visited {
+	font-family: Georgia;
+	font-size: 22px;
+	color: $black;
+}
+/**
+***************** C. Main Menu ************************ 
+*/

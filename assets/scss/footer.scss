@@ -1,0 +1,26 @@
+/**
+* Footer Styles
+*
+* @package ***Theme Name***
+* @author Jacob Martella
+* @version 1.0
+*/
+//* Define the variables to be used in this stylesheet
+@import "mixins";
+@import "settings";
+$background_color: #252525;
+$color: #ffffff;
+
+.footer {
+	background-color: $background_color;
+	color: $color;
+	text-align: center;
+}
+
+.footer a, .footer a:link, .footer a:visited {
+	color: $color;
+}
+
+.footer a:hover {
+	color: #000000;
+}

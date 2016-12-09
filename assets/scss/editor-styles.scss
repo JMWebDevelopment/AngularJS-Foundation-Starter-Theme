@@ -1,0 +1,15 @@
+/**
+* Editor Styles
+*
+* @package ***Theme Name***
+* @author Jacob Martella
+* @version 1.0
+*/
+@import "mixins";
+@import "settings";
+@import "wordpress.scss";
+@import "default.scss";
+
+html {
+	padding: 2.5% 2.5%;
+}

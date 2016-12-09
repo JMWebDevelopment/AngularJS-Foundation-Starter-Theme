@@ -1,0 +1,55 @@
+/**
+* WordPress Classes Styles
+*
+* @package ***Theme Name***
+* @author Jacob Martella
+* @version 1.0
+*/
+/*
+* A. By Author
+* B. Sticky
+* C. Photos
+* D. Gallery
+*/
+//* Define the variables to be used in this stylesheet
+@import "mixins";
+@import "settings";
+
+/*
+A. By Author
+------------------------------------------- */
+.bypostauthor {
+  background-color: #AFAFAF;
+}
+/*
+B. Sticky
+------------------------------------------- */
+.sticky {
+  background-color: #AFAFAF; position: relative;
+}
+/*
+C. Photos
+------------------------------------------- */
+.aligncenter  { display: block;
+  margin: 0 auto !important;
+  border: solid 1px #505050;
+  background-color: #AFAFAF;
+  padding: 6px;
+  max-width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.alignright  { float: right; margin: 0 0 1em 1em; border: solid 1px #505050; background-color: #AFAFAF; padding: 6px; max-width: 100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;}
+.alignleft  { float: left; margin: 0 1em 1em 0; border: solid 1px #505050; background-color: #AFAFAF; padding: 6px; max-width: 100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;}
+.alignnone { float: left; margin: 0 1em 1em 0; border: solid 1px #505050; background-color: #AFAFAF; padding: 6px; max-width: 100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;}
+.floatleft  { float: left; }
+.floatright  { float: right; }
+p.wp-caption-text {font-family: Arial; font-size: 12px;}
+/*
+D. Gallery
+------------------------------------------- */
+.gallery  { clear: both; margin: 10px 0; }
+.gallery-item  { float: left; margin-right: 10px; width: 31%; text-align: center; }
+.gallery-icon img  { padding: 4px; }
+.gallery-caption  { font-size: 12px; }

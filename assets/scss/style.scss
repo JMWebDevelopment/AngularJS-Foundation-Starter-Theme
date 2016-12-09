@@ -1,0 +1,150 @@
+/*
+Theme Name: Angular Starter Theme
+Theme URI: http://www.jacobmartella.com/wordpress/wordpress-theme/{theme-slug}-wordpress-theme
+Description:
+Author: Jacob Martella
+Author URI: http://www.jacobmartella.com/
+Version: 1.0
+License: GNU General Public License & MIT
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags:
+Theme Slug: theme-slug
+*/
+/**
+* Table of Contents
+* I. Global Styles
+*   A. Foundation Defaults
+*   B. Theme Defaults
+*   C. WordPress Classes
+* II. Header
+* III. Home
+* IV. Single
+* V. Comments
+* VI. Index
+* VII. Author
+* VIII. Pages
+*   A. 404
+* IX. Sidebar
+* 	A. Widgets
+* X. Footer
+*
+* NOTE: Theme specific styles begin on line ---.
+*/
+/**
+***************** I. Global Styles ************************
+*/
+/**
+***************** A. Founation Defaults ************************
+*/
+// Import normalize from vendor files
+@import "../../vendor/foundation-sites/scss/vendor/normalize";
+
+// Import mixins
+@import "mixins";
+
+// Import local Foundation overrides - Don't link to Bower version as it will be overwritten whenever updated
+@import "settings";
+
+// Import foundation.scss from vendor files
+@import "../../vendor/foundation-sites/scss/foundation";
+
+// Import Motion-UI from vendor files
+@import "../../vendor/motion-ui/src/motion-ui";
+@include motion-ui-transitions;
+@include motion-ui-animations;
+
+// Select the components you want to use
+@include foundation-global-styles;
+@include foundation-grid;
+@include foundation-typography;
+@include foundation-button;
+@include foundation-forms;
+@include foundation-visibility-classes;
+@include foundation-float-classes;
+@include foundation-accordion;
+@include foundation-accordion-menu;
+@include foundation-badge;
+@include foundation-breadcrumbs;
+@include foundation-button-group;
+@include foundation-callout;
+@include foundation-close-button;
+@include foundation-drilldown-menu;
+@include foundation-dropdown;
+@include foundation-dropdown-menu;
+@include foundation-flex-video;
+@include foundation-label;
+@include foundation-media-object;
+@include foundation-menu;
+@include foundation-off-canvas;
+@include foundation-orbit;
+@include foundation-pagination;
+@include foundation-progress-bar;
+@include foundation-slider;
+@include foundation-sticky;
+@include foundation-reveal;
+@include foundation-switch;
+@include foundation-table;
+@include foundation-tabs;
+@include foundation-thumbnail;
+@include foundation-title-bar;
+@include foundation-tooltip;
+@include foundation-top-bar;
+
+// Import your custom styles
+@import "main";
+
+// Import your retina/HD sty;es
+@import "2x";
+
+// Import your print styles
+@import "print";
+
+/**
+***************** B. Theme Defaults ************************
+*/
+@import "default.scss";
+
+/**
+***************** C. WordPress Classes ************************
+*/
+@import "wordpress.scss";
+
+/**
+***************** II. Header ************************
+*/
+@import "header.scss";
+
+/**
+***************** III. Home ************************
+*/
+@import "home.scss";
+
+/**
+***************** IV. Single ************************
+*/
+@import "single.scss";
+
+/**
+***************** V. Comments ************************
+*/
+@import "comments.scss";
+
+/**
+***************** VI. Index ************************
+*/
+@import "index.scss";
+
+/**
+***************** VIII. Pages ************************
+*/
+@import "page.scss";
+
+/**
+***************** IX. Sidebars ************************
+*/
+@import "sidebar.scss";
+
+/**
+***************** X. Footer ************************
+*/
+@import "footer.scss";

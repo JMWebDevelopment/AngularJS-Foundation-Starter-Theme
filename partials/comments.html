@@ -1,0 +1,10 @@
+<li id="comment-{{member.comment_ID}}" class="comment comment-{{member.comment_ID}} {{member.comment_parent ? 'child-comment post-parent-' + member.comment_parent : ''}}">
+    <header class="comment-header">
+        <h4 class="comment-name">{{member.comment_author}}</h4>
+        <h5 class="comment-date">{{ member.comment_date | date:"h:mm a" }} on {{ member.comment_date | date:"MMMM dd, yyyy" }}</h5>
+    </header>
+    <div class="comment-content" ng-bind-html="member.comment_content | unsafe"></div>
+    <footer class="reply">
+        <button id="reply-{{member.comment_ID}}" class="respond-to-comment button" onclick="replyToComment(this.id)">Reply</button>
+    </footer>
+</li>

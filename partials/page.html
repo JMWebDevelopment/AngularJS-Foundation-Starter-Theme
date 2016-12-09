@@ -1,0 +1,6 @@
+<div ng-controller="Page">
+    <!--<img src="{{media.guid.rendered}}" />-->
+    <h1>{{post.title.rendered}}</h1>
+    <!--<h3>Written by: {{user.name}} on {{theDate}}</h3>-->
+    <p ng-bind-html="post.content.rendered | unsafe"></p>
+</div>
