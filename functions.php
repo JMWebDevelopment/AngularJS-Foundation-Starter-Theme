@@ -166,10 +166,10 @@ add_action( 'template_redirect', 'search_url_rewrite' );
 add_action( 'rest_api_init', 'theme_slug_register_rest_fields' );
 function theme_slug_register_rest_fields() {
 
-    register_rest_route( 'wp/v2', '/posts?year=(?P<year>\d+)', array(
+    register_rest_route( 'wp/v2', '/posts?year=(?P<year>[0-9 .\-]+)', array(
         'methods' => 'GET',
         'callback' => 'theme_slug_get_year_posts',
-    ) );
+    ), true );
 
     register_rest_field( 'post',
         'featured_image',
@@ -218,7 +218,7 @@ function theme_slug_register_rest_fields() {
 
 function theme_slug_get_year_posts( $data ) {
     echo 'in here somewhere';
-    $posts = get_posts( array ( 'year' => $data[ 'year' ] ) );
+    $posts = get_posts( array ( 'year' => (int) $data[ 'year' ] ) );
 
     print_r($data);
 
@@ -260,36 +260,34 @@ function theme_slug_get_tag_name_from_restapi( $object, $field_name, $request ) 
     return $tags;
 }
 
-add_filter('rest_endpoints', function ($routes) {
-    // I'm modifying multiple types here, you won't need the loop if you're just doing posts
-    foreach (['posts'] as $type) {
-        if (!($route =& $routes['/wp/v2/' . $type])) {
-            continue;
-        }
+add_action( 'rest_post_collection_params', function( $params ) {
+    $params['year'] = array(
+        'type'        => 'integer',
+        'description' => 'Restrict posts to ones published in a specific year.'
+    );
+    $params['monthnum'] = array(
+        'type'        => 'integer',
+        'description' => 'Restrict posts to ones published in a specific month.'
+    );
+    $params['day'] = array(
+        'type'        => 'integer',
+        'description' => 'Restrict posts to ones published in a specific day.'
+    );
+        return $params;
+} );
 
-        // Allow ordering by my meta value
-        //$route[0]['args']['orderby']['enum'][] = 'meta_value_num';
-
-        // Allow only the meta keys that I want
-        $route[0]['args']['first_word'] = array(
-            'description'       => 'The meta key to query.',
-            'type'              => 'string',
-            //'enum'              => ['my_meta_key', 'another key'],
-            'validate_callback' => 'rest_validate_request_arg',
-        );
+add_filter( 'rest_post_query', function( $query_vars, $request ) {
+    if ( $request['year'] ) {
+        $query_vars['year'] = $request['year'];
     }
-
-    return $routes;
-});
-
-$type = 'posts'; // or your own custom post type, etc
-add_filter('rest_' . $type . '_query', function ($args, $request) {
-    if ($key = $request->get_param('first_word')) {
-        $args['first_word'] = $key;
+    if ( $request['monthnum'] ) {
+        $query_vars['monthnum'] = $request['monthnum'];
     }
-    print_r($args);
-    return $args;
-}, 10, 2);
+    if ( $request['day'] ) {
+        $query_vars['day'] = $request['day'];
+    }
+        return $query_vars;
+}, 10, 2 );
 
 function theme_slug_get_comments( $object, $field_name, $request ) {
 

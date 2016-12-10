@@ -9,9 +9,13 @@ The WP REST API has been merged into core beginning with WordPress 4.7. It's a g
 
 ### To do
 Obviously this is still a work in progress. Here's what's on my to-do list for the starter theme.
-- Figure out routes to get posts by day, month and year
+- ~~Figure out routes to get posts by day, month and year~~
+- Work on adding support for translations.
 
 ### Changelog
+**1.1**
+Added support for year, month and date archives
+
 **1.0**
 - Initial release to the GitHub repo
 

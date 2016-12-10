@@ -150,25 +150,34 @@ function setPaginationLinks( page, pagedUrl, headers, totalPages ) {
     }
 }
 
-function getArchiveUrl( archiveType, endpoint, page  ) {
+function getArchiveUrl( archiveType, endpoints, page  ) {
 	var url = '';
 	var pagedUrl = '';
 	if ( archiveType == 'Author' ) {
-        url = myLocalized.api_url + 'users?slug=' + endpoint;
-        pagedUrl = myLocalized.site_url + 'author/' + endpoint + '/page/';
+        url = myLocalized.api_url + 'users?slug=' + endpoints[0];
+        pagedUrl = myLocalized.site_url + 'author/' + endpoints[0] + '/page/';
     } else if ( archiveType == 'Category' ) {
-        url = myLocalized.api_url + 'categories?slug=' + endpoint;
-        pagedUrl = myLocalized.site_url + 'category/' + endpoint + '/page/';
+        url = myLocalized.api_url + 'categories?slug=' + endpoints[0];
+        pagedUrl = myLocalized.site_url + 'category/' + endpoints[0] + '/page/';
     } else if ( archiveType == 'Search' ) {
         if ( page > 1 ) {
-            url = myLocalized.api_url + 'posts?search=' + endpoint + '&page=' + page;
+            url = myLocalized.api_url + 'posts?search=' + endpoints[0] + '&page=' + page;
         } else {
-            url = myLocalized.api_url + 'posts?search=' + endpoint;
+            url = myLocalized.api_url + 'posts?search=' + endpoints[0];
         }
-        pagedUrl = myLocalized.site_url + 'search/' + endpoint + '/page/';
+        pagedUrl = myLocalized.site_url + 'search/' + endpoints[0] + '/page/';
     } else if ( archiveType == 'Tag' ) {
-        url = myLocalized.api_url + 'tags?slug=' + endpoint;
-        pagedUrl = myLocalized.site_url + 'tag/' + endpoint + '/page/';
+        url = myLocalized.api_url + 'tags?slug=' + endpoints[0];
+        pagedUrl = myLocalized.site_url + 'tag/' + endpoints[0] + '/page/';
+    } else if ( archiveType == 'Year' ) {
+        url = myLocalized.api_url + 'posts?year=' + endpoints[0];
+        pagedUrl = myLocalized.site_url + '' + endpoints[0] + '/page/';
+    } else if ( archiveType == 'Month' ) {
+        url = myLocalized.api_url + 'posts?year=' + endpoints[0] + '&monthnum=' + endpoints[1];
+        pagedUrl = myLocalized.site_url + '' + endpoints[0] + '/' + endpoints[1] + '/page/';
+    } else if ( archiveType == 'Day' ) {
+        url = myLocalized.api_url + 'posts?year=' + endpoints[0] + '&monthnum=' + endpoints[1] + '&day=' + endpoints[2];
+        pagedUrl = myLocalized.site_url + '' + endpoints[0] + '/' + endpoints[1] + '/' + endpoints[2] + '/page/';
     }
     return [url, pagedUrl];
 }
@@ -269,17 +278,27 @@ function getArchivePosts( archiveType, page, endpoint, endpointId ) {
 			console.log('archive view');
 			var url = '';
 			var pagedUrl = '';
-			var urls = getArchiveUrl( $stateParams.archiveType, $stateParams.endpoint, $stateParams.page  );
+			if ( $stateParams.archiveType == 'Day' || $stateParams.archiveType == 'Month' ) {
+				var endpoints = [];
+				if ( $stateParams.archiveType == 'Day' ) {
+					endpoints = [ $stateParams.year, $stateParams.month, $stateParams.endpoint ];
+				} else {
+                    endpoints = [ $stateParams.year, $stateParams.endpoint ];
+				}
+			} else {
+				endpoints = [ $stateParams.endpoint ];
+			}
+			var urls = getArchiveUrl( $stateParams.archiveType, endpoints, $stateParams.page  );
 			url = urls[0];
 			pagedUrl = urls[1];
-			if ( $stateParams.archiveType != 'Search' ) {
+			console.log(url);
+			if ( $stateParams.archiveType != 'Search' && $stateParams.archiveType != 'Year' && $stateParams.archiveType != 'Month' && $stateParams.archiveType != 'Day' ) {
 				$http.get(url).success(function (res) {
 					$scope.term = res[0];
-					console.log($scope.term);
 					$scope.archiveType = $stateParams.archiveType;
 					document.querySelector('title').innerHTML = $scope.term.name + ' | ' + myLocalized.site_title;
 					changeCurrentNavItem();
-					var url = getArchivePosts( $stateParams.archiveType, $stateParams.page, $stateParams.endpoint, $scope.term.id );
+					var url = getArchivePosts( $stateParams.archiveType, $stateParams.page, endpoints[0], $scope.term.id );
                     $http.get(url).success(function (res, status, headers) {
 						$scope.posts = res;
 						$scope.totalPages = headers( 'X-WP-Total' );
@@ -290,7 +309,15 @@ function getArchivePosts( archiveType, page, endpoint, endpointId ) {
 			} else {
 				$http.get(url).success(function (res, status, headers) {
 					$scope.posts = res;
-					document.querySelector('title').innerHTML = $scope.endpoint + ' | ' + myLocalized.site_title;
+					if ( $stateParams.archiveType == 'Search' ) {
+                        document.querySelector('title').innerHTML = endpoints[0] + ' | ' + myLocalized.site_title;
+                    } else if ( $stateParams.archiveType == 'Year' ) {
+                        document.querySelector('title').innerHTML = endpoints[0] + ' | ' + myLocalized.site_title;
+					} else if ( $stateParams.archiveType == 'Month' ) {
+                        document.querySelector('title').innerHTML = endpoints[0] + endpoints[1] + ' | ' + myLocalized.site_title;
+                    } else {
+                        document.querySelector('title').innerHTML = endpoints[0] + endpoints[1] + endpoints[2] + ' | ' + myLocalized.site_title;
+					}
                     setPaginationLinks( $stateParams.page, pagedUrl, headers, $scope.totalPages );
 				});
 			}
@@ -374,7 +401,7 @@ function getArchivePosts( archiveType, page, endpoint, endpointId ) {
 					templateUrl: myLocalized.partials + 'single.html'
 				})
 				.state('ArchiveYear', {
-					url: '/{year:int}/',
+					url: '/{endpoint:int}/',
 					controller: 'Archive',
 					params :{
 						archiveType: 'Year'
@@ -382,7 +409,7 @@ function getArchivePosts( archiveType, page, endpoint, endpointId ) {
 					templateUrl: myLocalized.partials + 'archive.html',
 				})
                 .state('ArchiveYearPaged', {
-                    url: '/{year:int}/page/{page:int}/',
+                    url: '/{endpoint:int}/page/{page:int}/',
                     controller: 'Archive',
                     params :{
                         archiveType: 'Year'
@@ -390,7 +417,7 @@ function getArchivePosts( archiveType, page, endpoint, endpointId ) {
                     templateUrl: myLocalized.partials + 'archive.html',
                 })
 				.state('ArchiveMonth', {
-					url: '/{year:int}/{month:int}/',
+					url: '/{year:int}/{endpoint:int}/',
 					controller: 'Archive',
 					params :{
 						archiveType: 'Month'
@@ -398,7 +425,7 @@ function getArchivePosts( archiveType, page, endpoint, endpointId ) {
 					templateUrl: myLocalized.partials + 'archive.html',
 				})
                 .state('ArchiveMonthPaged', {
-                    url: '/{year:int}/{month:int}/page/{page:int}/',
+                    url: '/{year:int}/{endpoint:int}/page/{page:int}/',
                     controller: 'Archive',
                     params :{
                         archiveType: 'Month'
@@ -406,7 +433,7 @@ function getArchivePosts( archiveType, page, endpoint, endpointId ) {
                     templateUrl: myLocalized.partials + 'archive.html',
                 })
 				.state('ArchiveDay', {
-					url: '/{year:int}/{month:int}/{day:int}/',
+					url: '/{year:int}/{month:int}/{endpoint:int}/',
 					controller: 'Archive',
 					params :{
 						archiveType: 'Day'
@@ -414,7 +441,7 @@ function getArchivePosts( archiveType, page, endpoint, endpointId ) {
 					templateUrl: myLocalized.partials + 'archive.html',
 				})
                 .state('ArchiveDayPaged', {
-                    url: '/{year:int}/{month:int}/{day:int}/page/{page:int}/',
+                    url: '/{year:int}/{month:int}/{endpoint:int}/page/{page:int}/',
                     controller: 'Archive',
                     params :{
                         archiveType: 'Day'
