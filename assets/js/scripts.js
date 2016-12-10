@@ -208,6 +208,11 @@ function getArchivePosts( archiveType, page, endpoint, endpointId ) {
     return url;
 }
 
+function getMonthName( month ) {
+	month = month - 1;
+	return myLocalized.months[month];
+}
+
 (function() {
 	angular.module('myapp', ['ui.router', 'ngResource'])
 		.factory('Comments',function($resource){
@@ -234,7 +239,6 @@ function getArchivePosts( archiveType, page, endpoint, endpointId ) {
 			});
 		}])
 		.controller('SinglePost', ['$scope', '$http', '$stateParams', 'Comments', function ($scope, $http, $stateParams, Comments) {
-			console.log('single view running');
 			$http.get(myLocalized.api_url + 'posts?slug=' + $stateParams.slug + '&_embed').success(function(res){
 				$scope.post = res[0];
 				$scope.post.comments = arrangeComments( $scope.post.comments );
@@ -267,7 +271,6 @@ function getArchivePosts( archiveType, page, endpoint, endpointId ) {
 			}
 		}])
 		.controller('Page', ['$scope', '$http', '$stateParams', function ($scope, $http, $stateParams) {
-			console.log('page view running');
 			$http.get( myLocalized.api_url + 'pages?slug=' + $stateParams.slug ).success(function(res){
 				$scope.post = res[0];
 				document.querySelector('title').innerHTML = res[0].title.rendered + ' | ' + myLocalized.site_title
@@ -275,7 +278,6 @@ function getArchivePosts( archiveType, page, endpoint, endpointId ) {
 			});
 		}])
 		.controller('Archive', ['$scope', '$http', '$stateParams', function ($scope, $http, $stateParams) {
-			console.log('archive view');
 			var url = '';
 			var pagedUrl = '';
 			if ( $stateParams.archiveType == 'Day' || $stateParams.archiveType == 'Month' ) {
@@ -291,12 +293,16 @@ function getArchivePosts( archiveType, page, endpoint, endpointId ) {
 			var urls = getArchiveUrl( $stateParams.archiveType, endpoints, $stateParams.page  );
 			url = urls[0];
 			pagedUrl = urls[1];
-			console.log(url);
 			if ( $stateParams.archiveType != 'Search' && $stateParams.archiveType != 'Year' && $stateParams.archiveType != 'Month' && $stateParams.archiveType != 'Day' ) {
 				$http.get(url).success(function (res) {
 					$scope.term = res[0];
 					$scope.archiveType = $stateParams.archiveType;
 					document.querySelector('title').innerHTML = $scope.term.name + ' | ' + myLocalized.site_title;
+					if ( $stateParams.archiveType == 'Author' ) {
+                        $scope.archiveTitle = 'Posts by: ' + $scope.term.name;
+					} else {
+                        $scope.archiveTitle = $scope.term.name;
+                    }
 					changeCurrentNavItem();
 					var url = getArchivePosts( $stateParams.archiveType, $stateParams.page, endpoints[0], $scope.term.id );
                     $http.get(url).success(function (res, status, headers) {
@@ -311,12 +317,16 @@ function getArchivePosts( archiveType, page, endpoint, endpointId ) {
 					$scope.posts = res;
 					if ( $stateParams.archiveType == 'Search' ) {
                         document.querySelector('title').innerHTML = endpoints[0] + ' | ' + myLocalized.site_title;
+                        $scope.archiveTitle = 'Search: ' + endpoints[0];
                     } else if ( $stateParams.archiveType == 'Year' ) {
                         document.querySelector('title').innerHTML = endpoints[0] + ' | ' + myLocalized.site_title;
+                        $scope.archiveTitle = endpoints[0];
 					} else if ( $stateParams.archiveType == 'Month' ) {
-                        document.querySelector('title').innerHTML = endpoints[0] + endpoints[1] + ' | ' + myLocalized.site_title;
+                        document.querySelector('title').innerHTML = getMonthName( endpoints[1] ) + ' ' + endpoints[0] + ' | ' + myLocalized.site_title;
+                        $scope.archiveTitle = getMonthName( endpoints[1] ) + ' ' + endpoints[0];
                     } else {
-                        document.querySelector('title').innerHTML = endpoints[0] + endpoints[1] + endpoints[2] + ' | ' + myLocalized.site_title;
+                        document.querySelector('title').innerHTML = getMonthName (endpoints[1] ) + ' ' + endpoints[2] + ', ' + endpoints[0] + ' | ' + myLocalized.site_title;
+                        $scope.archiveTitle = getMonthName( endpoints[1] ) + ' ' + endpoints[2] + ', ' + endpoints[0];
 					}
                     setPaginationLinks( $stateParams.page, pagedUrl, headers, $scope.totalPages );
 				});

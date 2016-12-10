@@ -57,7 +57,8 @@ function theme_slug_scripts() {
 		'site_title' 			=> get_bloginfo( 'name' ),
 		'site_description' 		=> get_bloginfo( 'description' ),
 		'logged_in' 			=> is_user_logged_in(),
-		'logged_in_user'		=> $user
+		'logged_in_user'		=> $user,
+        'months'                => theme_slug_get_months()
 	);
 	wp_enqueue_script( 'site-js', get_template_directory_uri() . '/assets/js/scripts.js', array( 'jquery', 'angularjs', 'angularjs-route' ), '', true );
 	wp_localize_script( 'site-js', 'myLocalized', $args );
@@ -348,6 +349,17 @@ function theme_slug_get_author_slug( $object, $field_name, $request ) {
 	return $user->user_login;
 }
 
+function theme_slug_get_months() {
+    $month_num_array = [ '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12' ];
+    $month_array = [];
+
+    foreach ( $month_num_array as $month_num ) {
+        $month = $GLOBALS['wp_locale']->get_month( $month_num );
+        array_push( $month_array, $month );
+    }
+
+    return $month_array;
+}
 /**
  ******************** III. Header Functions *********************************
  */
