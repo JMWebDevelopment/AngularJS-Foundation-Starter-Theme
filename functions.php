@@ -58,7 +58,26 @@ function theme_slug_scripts() {
 		'site_description' 		=> get_bloginfo( 'description' ),
 		'logged_in' 			=> is_user_logged_in(),
 		'logged_in_user'		=> $user,
-        'months'                => theme_slug_get_months()
+        'months'                => theme_slug_get_months(),
+        'translations'          => [
+            'page_404_title' => __( 'Post or Page Not Found!', 'theme-slug' ),
+            'page_404_content' => __( 'The post or page you are looking for isn\'t here . Please return to the < a href = "/" > homepage</a >', 'theme-slug' ),
+            'archive_previous' => __( '<<Previous Posts', 'theme-slug'),
+            'archive_next' => __( 'Next Posts>>', 'theme-slug'),
+            'reply' => __( 'Reply', 'theme-slug'),
+            'no_comments' => __( 'No Comments on', 'theme-slug' ),
+            'comments' => __( 'Comments', 'theme-slug' ),
+            'comment' => __( 'Comment', 'theme-slug' ),
+            'on' => __( 'On', 'theme-slug' ),
+            'add_comment' => __( 'Add Comment', 'theme-slug' ),
+            'required' => __( 'Required', 'theme-slug' ),
+            'your_comment' => __( 'You\'re comment...', 'theme-slug' ),
+            'replying_to' => __( 'Replying to ', 'theme-slug' ),
+            'remove_reply' => __( 'Remove reply', 'theme-slug' ),
+            'written_by' => __( 'Written by: ', 'theme-slug' ),
+            'categories' => __( 'Categories: ', 'theme-slug' ),
+            'tags' => __( 'Tags: ', 'theme-slug' )
+        ]
 	);
 	wp_enqueue_script( 'site-js', get_template_directory_uri() . '/assets/js/scripts.js', array( 'jquery', 'angularjs', 'angularjs-route' ), '', true );
 	wp_localize_script( 'site-js', 'myLocalized', $args );

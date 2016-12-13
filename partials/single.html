@@ -4,26 +4,26 @@
             <img ng-src="{{post.featured_image}}" />
         </div>
         <h1>{{post.title.rendered}}</h1>
-        <h3>Written by: {{post._embedded.author[0].name}} on {{ post.date | date:"MMMM dd, yyyy" }}</h3>
-        <h5>Categories: <span ng-repeat="category in post.category_name">{{category}}{{$last ? '' : ', '}}</span></h5>
-        <h5>Tags: <span ng-repeat="tag in post.tag_name">{{tag}}{{$last ? '' : ', '}}</span></h5>
+        <h3>{{translations.written_by}} {{post._embedded.author[0].name}} on {{ post.date | date:"MMMM dd, yyyy" }}</h3>
+        <h5>{{translations.categories}} <span ng-repeat="category in post.category_name">{{category}}{{$last ? '' : ', '}}</span></h5>
+        <h5>{{translations.tags}} <span ng-repeat="tag in post.tag_name">{{tag}}{{$last ? '' : ', '}}</span></h5>
     </header>
     <div class="post-content" ng-bind-html="post.content.rendered | unsafe"></div>
     <footer class="post-footer"></footer>
     <section class="post-comments" ng-if="post.comment_status == 'open'">
         <div ng-hide="post.comments.length">
-            <h3 class="comments-header">No Comments on "{{post.title.rendered}}"</h3>
+            <h3 class="comments-header">{{translations.no_comments}} "{{post.title.rendered}}"</h3>
         </div>
-        <h3 ng-show="post.comments.length">{{numComments}} {{numComments > 1 ? 'Comments' : 'Comment'}} on "{{post.title.rendered}}"</h3>
-        <h4 class="add-comment">Add Comment</h4>
+        <h3 ng-show="post.comments.length">{{numComments}} {{numComments > 1 ? 'Comments' : 'Comment'}} {{translations.on}} "{{post.title.rendered}}"</h3>
+        <h4 class="add-comment">{{translations.add_comment}}</h4>
         <form ng-submit="savecomment()" name="CommentForm" id="comment-form">
             <div class="form-group" ng-if="loggedIn == false">
                 <input type="text" id="name" name="name" ng-model="openComment.author_name" placeholder="Name" required/>
-                <span ng-show="CommentForm.name.$error.required" class="help-block">Required</span>
+                <span ng-show="CommentForm.name.$error.required" class="help-block">{{translations.required}}</span>
             </div>
             <div class="form-group"  ng-if="loggedIn == false">
                 <input type="email" name="email" id="email" ng-model="openComment.author_email" placeholder="Email Address" required />
-                <span ng-show="CommentForm.email.$error.required" class="help-block">Required</span>
+                <span ng-show="CommentForm.email.$error.required" class="help-block">{{translations.required}}</span>
             </div>
             <div class="form-group" ng-if="loggedIn == true">
                 <p>Logged in as {{currentUser.data.display_name}}.</p>
@@ -32,10 +32,10 @@
             </div>
             <div class="form-group">
                 <textarea required id="comment-content" name="comment" ng-model="openComment.content" placeholder="Your Comment..."></textarea><br/>
-                <span ng-show="CommentForm.comment.$error.required" class="help-block">Required</span>
+                <span ng-show="CommentForm.comment.$error.required" class="help-block">{{translations.required}}</span>
                 <input type="hidden" name="parent" id="parent" value="0" ng-model="openComment.parent" />
             </div>
-            <input class="button" type="submit" value="Add Comment" />
+            <input class="button" type="submit" value="{{translations.add_comment}}" />
         </form>
         <collection collection='post.comments'></collection>
     </section>

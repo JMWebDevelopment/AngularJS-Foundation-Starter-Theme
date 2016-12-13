@@ -5,6 +5,6 @@
     </header>
     <div class="comment-content" ng-bind-html="member.comment_content | unsafe"></div>
     <footer class="reply">
-        <button id="reply-{{member.comment_ID}}" class="respond-to-comment button" onclick="replyToComment(this.id)">Reply</button>
+        <button id="reply-{{member.comment_ID}}" class="respond-to-comment button" onclick="replyToComment(this.id)">{{translations.reply}}</button>
     </footer>
 </li>

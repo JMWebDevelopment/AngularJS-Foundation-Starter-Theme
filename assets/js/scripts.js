@@ -106,14 +106,14 @@ function replyToComment( commentParentId ) {
 	commentParentId = commentParentId.split("-").pop();
 	jQuery( '#parent' ).val( commentParentId );
 	var replyTo = jQuery( '#comment-' + commentParentId + ' .comment-name' ).html();
-	jQuery('.add-comment').html( 'Replying to ' + replyTo + '  <span onclick="removeReply()">Remove Reply</span>' );
+	jQuery('.add-comment').html( myLocalized.translations.replying_to + replyTo + '  <span onclick="removeReply()">myLocalized.translations.remove_reply</span>' );
 	jQuery('html, body').animate({
 		scrollTop: jQuery(".post-comments").offset().top
 	}, 500);
 }
 function removeReply() {
 	jQuery( '#parent' ).val('0');
-	jQuery('.add-comment').html( 'Add Comment' );
+	jQuery('.add-comment').html( myLocalized.translations.add_comment );
 }
 
 function setPaginationLinks( page, pagedUrl, headers, totalPages ) {
@@ -184,7 +184,6 @@ function getArchiveUrl( archiveType, endpoints, page  ) {
 
 function getArchivePosts( archiveType, page, endpoint, endpointId ) {
 	var url = '';
-	var pagedUrl = '';
     if ( archiveType == 'Category' ) {
         if ( page > 1 ) {
             url = myLocalized.api_url + 'posts?categories=' + endpointId + '&page=' + page;
@@ -229,6 +228,7 @@ function getMonthName( month ) {
 			});
 		})
 		.controller('Home', ['$scope', '$http', '$stateParams', function ($scope, $http) {
+			$scope.translations = myLocalized.translations;
 			$http({
 				url: myLocalized.api_url + 'posts/',
 				cache: true
@@ -239,6 +239,7 @@ function getMonthName( month ) {
 			});
 		}])
 		.controller('SinglePost', ['$scope', '$http', '$stateParams', 'Comments', function ($scope, $http, $stateParams, Comments) {
+            $scope.translations = myLocalized.translations;
 			$http.get(myLocalized.api_url + 'posts?slug=' + $stateParams.slug + '&_embed').success(function(res){
 				$scope.post = res[0];
 				$scope.post.comments = arrangeComments( $scope.post.comments );
@@ -271,6 +272,7 @@ function getMonthName( month ) {
 			}
 		}])
 		.controller('Page', ['$scope', '$http', '$stateParams', function ($scope, $http, $stateParams) {
+            $scope.translations = myLocalized.translations;
 			$http.get( myLocalized.api_url + 'pages?slug=' + $stateParams.slug ).success(function(res){
 				$scope.post = res[0];
 				document.querySelector('title').innerHTML = res[0].title.rendered + ' | ' + myLocalized.site_title
@@ -278,6 +280,7 @@ function getMonthName( month ) {
 			});
 		}])
 		.controller('Archive', ['$scope', '$http', '$stateParams', function ($scope, $http, $stateParams) {
+            $scope.translations = myLocalized.translations;
 			var url = '';
 			var pagedUrl = '';
 			if ( $stateParams.archiveType == 'Day' || $stateParams.archiveType == 'Month' ) {
@@ -333,6 +336,7 @@ function getMonthName( month ) {
 			}
 		}])
 		.controller('NotFound', ['$scope', '$http', '$stateParams', function ($scope, $http, $stateParams) {
+            $scope.translations = myLocalized.translations;
 		}])
 		.config([ '$stateProvider', '$urlRouterProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, $locationProvider) {
 			$stateProvider
